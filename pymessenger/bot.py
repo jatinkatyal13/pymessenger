@@ -71,11 +71,9 @@ class Bot:
 			},
 			'notification_type': notification_type,
 			'message': {
-				{
-					'attachment': {
-						'type': attachment_type,
-						'payload': {}
-					}
+				'attachment': {
+					'type': attachment_type,
+					'payload': {}
 				}
 			},
 			'filedata': (os.path.basename(attachment_path), open(attachment_path, 'rb'))
