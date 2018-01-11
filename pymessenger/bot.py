@@ -7,8 +7,6 @@ from requests_toolbelt import MultipartEncoder
 
 from pymessenger import utils
 
-import mimetypes
-
 DEFAULT_API_VERSION = 2.6
 
 
@@ -58,7 +56,7 @@ class Bot:
 		}, notification_type)
 
 	def send_attachment(self, recipient_id, attachment_type, attachment_path,
-						notification_type=NotificationType.regular, MIME = None):
+						notification_type=NotificationType.regular, mime = None):
 		"""Send an attachment to the specified recipient using local path.
 		Input:
 			recipient_id: recipient id to send to
@@ -78,13 +76,15 @@ class Bot:
 					'payload': {}
 				}
 			}),
-			'filedata': (os.path.basename(attachment_path), open(attachment_path, 'rb')) if not MIME else os.path.basename(attachment_path) + ';type='+mimetypes.types_map['.'+attachment_path.split('.')[-1]]
+		}
+		file_payload = {
+			'filedata' : (os.path.basename(attachment_path), open(attachment_path, 'rb'), mime)
 		}
 		multipart_data = MultipartEncoder(payload)
 		multipart_header = {
 			'Content-Type': multipart_data.content_type
 		}
-		return requests.post('{}/me/messages?access_token='.format(self.graph_url, self.access_token), data=multipart_data, params=self.auth_args, headers=multipart_header).json()
+		return requests.post('{}/me/messages?access_token='.format(self.graph_url, self.access_token), data=multipart_data, files = file_payload, params=self.auth_args, headers=multipart_header).json()
 
 	def send_attachment_url(self, recipient_id, attachment_type, attachment_url,
 							notification_type=NotificationType.regular):
@@ -206,7 +206,7 @@ class Bot:
 		Output:
 			Response from API as <dict>
 		"""
-		return self.send_attachment(recipient_id, "audio", audio_path, notification_type)
+		return self.send_attachment(recipient_id, "audio", audio_path, notification_type, mime = 'audio/mp3')
 
 	def send_audio_url(self, recipient_id, audio_url, notification_type=NotificationType.regular):
 		"""Send audio to specified recipient using URL.
