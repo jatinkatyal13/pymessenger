@@ -67,9 +67,7 @@ class Bot:
 		"""
 		payload = {
 			'recipient': {
-				{
-					'id': recipient_id
-				}
+				'id': recipient_id
 			},
 			'notification_type': notification_type,
 			'message': {
