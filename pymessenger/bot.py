@@ -7,6 +7,8 @@ from requests_toolbelt import MultipartEncoder
 
 from pymessenger import utils
 
+import mimetypes
+
 DEFAULT_API_VERSION = 2.6
 
 
@@ -56,7 +58,7 @@ class Bot:
 		}, notification_type)
 
 	def send_attachment(self, recipient_id, attachment_type, attachment_path,
-						notification_type=NotificationType.regular):
+						notification_type=NotificationType.regular, MIME = None):
 		"""Send an attachment to the specified recipient using local path.
 		Input:
 			recipient_id: recipient id to send to
@@ -76,7 +78,7 @@ class Bot:
 					'payload': {}
 				}
 			}),
-			'filedata': (os.path.basename(attachment_path), open(attachment_path, 'rb'))
+			'filedata': (os.path.basename(attachment_path), open(attachment_path, 'rb')) if not MIME else os.path.basename(attachment_path) + ';type='+mimetypes.types_map['.'+attachment_path.split('.')[-1]]
 		}
 		multipart_data = MultipartEncoder(payload)
 		multipart_header = {
