@@ -80,16 +80,15 @@ class Bot:
 		file_payload = {
 			'filedata' : (os.path.basename(attachment_path), open(attachment_path, 'rb'), mime)
 		}
-		multipart_data = MultipartEncoder(payload)
-		multipart_header = {
-			'Content-Type': multipart_data.content_type
-		}
+		# multipart_data = MultipartEncoder(payload)
+		# multipart_header = {
+		# 	'Content-Type': multipart_data.content_type
+		# }
 		return requests.post(
-			'{}/me/messages?access_token='.format(self.graph_url, self.access_token), 
+			'{}/me/messages?access_token={}'.format(self.graph_url, self.access_token), 
 			data=payload, 
 			files = file_payload, 
-			params=self.auth_args, 
-			headers=multipart_header).json()
+			params=self.auth_args).json()
 
 	def send_attachment_url(self, recipient_id, attachment_type, attachment_url,
 							notification_type=NotificationType.regular):
