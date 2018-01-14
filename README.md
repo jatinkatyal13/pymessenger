@@ -4,7 +4,7 @@ Python Wrapper for [Facebook Messenger Platform](https://developers.facebook.com
 
 __Disclaimer__: This wrapper is __NOT__ an official wrapper and do not attempt to represent Facebook in anyway.
 
-### About
+## About
 
 This wrapper has the following functions:
 
